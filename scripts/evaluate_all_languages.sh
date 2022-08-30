@@ -7,8 +7,10 @@ corpus_fn=$1
 out_folder=$2
 
 
-langs=("ar" "uk" "he" "ru" "it" "fr" "es" "de")
-mt_systems=("sota" "aws" "bing" "google" "systran" )
+#langs=("ar" "uk" "he" "ru" "it" "fr" "es" "de")
+langs=("de" "he")
+#mt_systems=("sota" "aws" "bing" "google" "systran" )
+mt_systems=("opus_mt")
 
 
 # Make sure systran has all translations
@@ -18,6 +20,7 @@ mt_systems=("sota" "aws" "bing" "google" "systran" )
 #     ../scripts/systran_language.sh $corpus_fn $lang
 # done
 
+# shellcheck disable=SC2068
 for trans_sys in ${mt_systems[@]}
 do
     for lang in ${langs[@]}

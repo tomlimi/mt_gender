@@ -12,6 +12,7 @@ from collections import defaultdict
 from operator import itemgetter
 from tqdm import tqdm
 from typing import List, Dict
+import numpy as np
 
 # Local imports
 from languages.util import GENDER, WB_GENDER_TYPES
@@ -24,7 +25,7 @@ def calc_f1(precision: float, recall: float) -> float:
     return 2 * (precision * recall) / (precision + recall)
 
 
-def evaluate_bias(ds: List[str], predicted: List[GENDER]) -> Dict:
+def evaluate_bias(ds: List[str], predicted: List[GENDER],lang: str) -> Dict:
     """
     (language independent)
     Get performance metrics for gender bias.
@@ -80,7 +81,43 @@ def evaluate_bias(ds: List[str], predicted: List[GENDER]) -> Dict:
                    "unk_male": count_unknowns[GENDER.male],
                    "unk_female": count_unknowns[GENDER.female],
                    "unk_neutral": count_unknowns[GENDER.neutral]}
+    print("*** output_dict ***")
     print(json.dumps(output_dict))
+
+    prof_accuracies = {}
+    for p in prof_dict.keys():
+        count = 0
+        for i in prof_dict[p]:
+            if i[0] == i[1]:
+                count += 1
+        prof_accuracies[p] = count / len(prof_dict[p])
+    print("*** prof_accuracies ***")
+    print(json.dumps(prof_accuracies))
+
+
+
+    prof_recalls = {}
+    for p in prof_dict.keys():
+        prof_recalls[p]={}
+        a=np.array(prof_dict[p])
+
+        male_indices = np.where(a[:,1]==GENDER.male)
+        num_of_correctly_predicted_male = np.count_nonzero(a[male_indices][:,0]==GENDER.male)
+        prof_recalls[p]["male_recall"] = num_of_correctly_predicted_male/len(male_indices[0])
+
+        female_indices = np.where(a[:,1]==GENDER.female)
+        num_of_correctly_predicted_female = np.count_nonzero(a[female_indices][:,0]==GENDER.female)
+        prof_recalls[p]["female_recall"] = num_of_correctly_predicted_female/len(female_indices[0])
+
+    print("*** prof_recalls ***")
+    print(json.dumps(prof_recalls))
+    with open("../data/results/"+lang+"_results.txt","w+") as f:
+        f.write("*** output_dict ***\n")
+        f.write(str(output_dict)+"\n")
+        f.write("*** prof_accuracies ***\n")
+        f.write(str(prof_accuracies)+"\n")
+        f.write("*** prof_recalls ***\n")
+        f.write(str(prof_recalls)+"\n")
 
     male_prof = [prof for prof, vals in prof_dict.items()
                  if all(pred_gender == GENDER.male

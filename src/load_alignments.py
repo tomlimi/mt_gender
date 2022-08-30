@@ -176,7 +176,7 @@ if __name__ == "__main__":
     # Output predictions
     output_predictions(target_sentences, gender_predictions, out_fn)
 
-    d = evaluate_bias(ds, gender_predictions)
+    d = evaluate_bias(ds, gender_predictions,lang)
 
 
     logging.info("DONE")

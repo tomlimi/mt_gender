@@ -21,11 +21,11 @@ mkdir -p ../data/human/$lang
 # Translate
 trans_fn=../translations/$trans_sys/$prefix.txt
 echo "!!! $trans_fn"
-if [ ! -f $trans_fn ]; then
-    python translate.py --trans=$trans_sys --in=./tmp.in --src=en --tgt=$2 --out=$trans_fn
-else
-    echo "Not translating since translation file exists: $trans_fn"
-fi
+#if [ ! -f $trans_fn ]; then
+#    python translate.py --trans=$trans_sys --in=./tmp.in --src=en --tgt=$2 --out=$trans_fn
+#else
+#    echo "Not translating since translation file exists: $trans_fn"
+#fi
 
 # Align
 align_fn=forward.$prefix.align
@@ -34,6 +34,7 @@ $FAST_ALIGN_BASE/build/fast_align -i $trans_fn -d -o -v > $align_fn
 # Evaluate
 mkdir -p ../data/human/$trans_sys/$lang/
 out_fn=../data/human/$trans_sys/$lang/${lang}.pred.csv
+echo "python load_alignments.py --ds=${dataset}  --bi=${trans_fn} --align=${align_fn} --lang=${lang} --out=${out_fn}"
 python load_alignments.py --ds=$dataset  --bi=$trans_fn --align=$align_fn --lang=$lang --out=$out_fn
 
 # Prepare files for human annots
