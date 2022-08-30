@@ -1,5 +1,5 @@
 """ Usage:
-    <file-name> --ds=DATASET_FILE --bi=IN_FILE --align=ALIGN_FILE --out=OUT_FILE --lang=LANG  [--debug]
+    <file-name> --ds=DATASET_FILE --bi=IN_FILE --align=ALIGN_FILE --out=OUT_FILE --lang=LANG  [--debug --match]
 """
 # External imports
 import logging
@@ -20,12 +20,13 @@ from languages.gendered_article import GenderedArticlePredictor, \
     get_german_determiners, GERMAN_EXCEPTION, get_french_determiners
 from languages.pymorph_support import PymorphPredictor
 from languages.semitic_languages import HebrewPredictor, ArabicPredictor
+from languages.manual_matching_de_he import ManualPredictor
 from languages.morfeusz_support import MorfeuszPredictor
 from evaluate import evaluate_bias
 from languages.czech import CzechPredictor
 #=-----
 
-LANGAUGE_PREDICTOR = {
+LANGUAGE_PREDICTOR = {
     "es": lambda: SpacyPredictor("es"),
     "fr": lambda: SpacyPredictor("fr"),
     "it": lambda: SpacyPredictor("it"),
@@ -37,6 +38,12 @@ LANGAUGE_PREDICTOR = {
     "cs": lambda: CzechPredictor(),
     "pl": lambda: MorfeuszPredictor(),
 }
+
+LANGUAGE_MATCH_PREDICTOR = {
+    "de": lambda: ManualPredictor("de"),
+    "he": lambda: ManualPredictor("he")
+}
+
 
 def get_src_indices(instance: List[str]) -> List[int]:
     """
@@ -115,7 +122,7 @@ def get_translated_professions(alignment_fn: str, ds: List[List[str]], bitext: L
     return translated_professions, target_indices
 
 
-def output_predictions(target_sentences, gender_predictions, out_fn):
+def output_predictions(target_sentences, gender_predictions, target_gender, out_fn):
     """
     Write gender predictions to output file, for comparison
     with human judgments.
@@ -123,9 +130,24 @@ def output_predictions(target_sentences, gender_predictions, out_fn):
     assert(len(list(target_sentences)) == len(list(gender_predictions)))
     with open(out_fn, "w", encoding = "utf8") as fout:
         writer = csv.writer(fout, delimiter=",")
-        writer.writerow(["Sentence", "Predicted gender"])
-        for sent, gender in zip(target_sentences, gender_predictions):
-            writer.writerow([sent, str(gender).split(".")[1]])
+        writer.writerow(["Sentence", "Predicted gender", "Target gender"])
+        for sent, gender, t_gender in zip(target_sentences, gender_predictions, target_gender):
+            writer.writerow([sent, str(gender).split(".")[1], t_gender])
+            
+
+def output_predictions_with_matches(target_sentences, gender_predictions, target_gender, matched_words, out_fn):
+    """
+    Write gender predictions to output file, for comparison
+    with human judgments.
+    """
+    assert(len(list(target_sentences)) == len(list(gender_predictions)))
+    assert(len(list(target_sentences)) == len(list(matched_words)))
+    with open(out_fn, "w", encoding = "utf8") as fout:
+        writer = csv.writer(fout, delimiter=",")
+        writer.writerow(["Sentence", "Predicted gender", "Target gender","Matched tranlation"])
+        for sent, gender, t_gender, matched_word in zip(target_sentences, gender_predictions, target_gender, matched_words):
+            writer.writerow([sent, str(gender).split(".")[1], t_gender, matched_word])
+
 
 def align_bitext_to_ds(bitext, ds):
     """
@@ -148,13 +170,13 @@ if __name__ == "__main__":
     out_fn = args["--out"]
     lang = args["--lang"]
 
+    match = args['--match']
     debug = args["--debug"]
     if debug:
         logging.basicConfig(level = logging.DEBUG)
     else:
         logging.basicConfig(level = logging.INFO)
 
-    gender_predictor = LANGAUGE_PREDICTOR[lang]()
 
     ds = [line.strip().split("\t") for line in open(ds_fn, encoding = "utf8")]
     full_bitext = [line.strip().split(" ||| ")
@@ -165,16 +187,33 @@ if __name__ == "__main__":
     assert(len(translated_profs) == len(tgt_inds))
 
     target_sentences = [tgt_sent for (ind, (src_sent, tgt_sent)) in bitext]
+    target_gender = [d[0] for d in ds]
+    
+    if match:
+        gender_predictor_matched = LANGUAGE_MATCH_PREDICTOR[lang]()
+        gednder_word_predicted = [gender_predictor_matched.get_gender(prof, translated_sent, entity_index, ds_entry)
+                                  for prof, translated_sent, entity_index, ds_entry
+                                  in tqdm(zip(translated_profs,
+                                              target_sentences,
+                                              map(lambda ls:min(ls, default = -1), tgt_inds),
+                                              ds))]
+        gender_predictions, word_matches = zip(*gednder_word_predicted)
+    
+        # Output predictions
+        output_predictions_with_matches(target_sentences, gender_predictions, target_gender, word_matches, out_fn)
 
-    gender_predictions = [gender_predictor.get_gender(prof, translated_sent, entity_index, ds_entry)
-                          for prof, translated_sent, entity_index, ds_entry
-                          in tqdm(zip(translated_profs,
-                                      target_sentences,
-                                      map(lambda ls:min(ls, default = -1), tgt_inds),
-                                      ds))]
+    else:
+        gender_predictor = LANGUAGE_PREDICTOR[lang]()
+        gender_predictions = [gender_predictor.get_gender(prof, translated_sent, entity_index, ds_entry)
+                              for prof, translated_sent, entity_index, ds_entry
+                              in tqdm(zip(translated_profs,
+                                          target_sentences,
+                                          map(lambda ls:min(ls, default = -1), tgt_inds),
+                                          ds))]
+    
+        # Output predictions
+        output_predictions(target_sentences, gender_predictions, target_gender, out_fn)
 
-    # Output predictions
-    output_predictions(target_sentences, gender_predictions, out_fn)
 
     d = evaluate_bias(ds, gender_predictions,lang)
 
