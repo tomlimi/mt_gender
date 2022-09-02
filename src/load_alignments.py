@@ -197,7 +197,7 @@ if __name__ == "__main__":
                                               target_sentences,
                                               map(lambda ls:min(ls, default = -1), tgt_inds),
                                               ds))]
-        gender_predictions, word_matches = zip(*gednder_word_predicted)
+        gender_predictions, word_matches, match_ids = zip(*gednder_word_predicted)
     
         # Output predictions
         output_predictions_with_matches(target_sentences, gender_predictions, target_gender, word_matches, out_fn)
@@ -213,9 +213,9 @@ if __name__ == "__main__":
     
         # Output predictions
         output_predictions(target_sentences, gender_predictions, target_gender, out_fn)
+        match_ids = [None] * len(gender_predictions)
 
-
-    d = evaluate_bias(ds, gender_predictions,lang)
+    d = evaluate_bias(ds, gender_predictions,lang, match_ids)
 
 
     logging.info("DONE")

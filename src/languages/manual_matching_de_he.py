@@ -38,32 +38,31 @@ class ManualPredictor:
         else:
             raise ValueError(f"Unrecognized language {self.lang}, supported: de and he")
         
-        
-    def get_gender(self, profession: str, translated_sent = None, entity_index = None, ds_entry = None) -> (GENDER, str):
+    def get_gender(self, profession: str, translated_sent = None, entity_index = None, ds_entry = None) -> (GENDER, str, int):
         """
         Predict gender of an input profession.
         """
         correct_prof = ds_entry[3].lower()
         if ds_entry[0] == "neutral":
-            return GENDER.ignore, None
+            return GENDER.ignore, None, None
 
-        gender, matched_word = self._get_gender(profession, translated_sent, entity_index, ds_entry)
+        gender, matched_word, matched_index = self._get_gender(profession, translated_sent, entity_index, ds_entry)
 
-        return gender, matched_word
+        return gender, matched_word, matched_index
 
-    def _get_gender(self, profession: str, translated_sent = None, entity_index = None, ds_entry = None) -> (GENDER, str):
+    def _get_gender(self, profession: str, translated_sent = None, entity_index = None, ds_entry = None) -> (GENDER, str, int):
         expected_english_profession = ds_entry[3].lower()
         expected_gender = ds_entry[0]
 
         # initially try to resolve problem based on exact manual rules
-        gender, matched_word = self._get_gender_manual_rules(profession, translated_sent, entity_index, ds_entry)
+        gender, matched_word, matched_index = self._get_gender_manual_rules(profession, translated_sent, entity_index, ds_entry)
 
         if gender in [GENDER.male, GENDER.female, GENDER.neutral]:
-            return gender, matched_word
+            return gender, matched_word, matched_index
 
-        return self.automatic_predictor.get_gender(profession, translated_sent, entity_index, ds_entry), None
+        return self.automatic_predictor.get_gender(profession, translated_sent, entity_index, ds_entry), None, None
 
-    def _get_gender_manual_rules(self, profession: str, translated_sent = None, entity_index = None, ds_entry = None) -> (GENDER, str):
+    def _get_gender_manual_rules(self, profession: str, translated_sent = None, entity_index = None, ds_entry = None) -> (GENDER, str, int):
         expected_english_profession = ds_entry[3].lower()
         expected_gender = ds_entry[0]
 
@@ -76,33 +75,37 @@ class ManualPredictor:
         
         both_possible = False
         matched_word = None
+        matched_index = None
         if male in self.variants:
-            for form in self.variants[male]:
+            for index, form in enumerate(self.variants[male]):
                 if re.search(form.lower() + "[^a-z\u0590-\u05fe]", translated_sent):
                     found_gender = GENDER.male
                     matched_word = form
+                    matched_index = index
                     break
     
         if female in self.variants:
-            for form in self.variants[female]:
+            for index, form in enumerate(self.variants[female]):
                 if re.search(form.lower() + "[^a-z\u0590-\u05fe]", translated_sent):
                     if found_gender is GENDER.male:
                         found_gender = GENDER.unknown
                         both_possible = True
                         if matched_word != form:
                             matched_word = None
+                            matched_index = None
                         break
                     matched_word = form
+                    matched_index = index
                     found_gender = GENDER.female
 
         # our morphology analysis cannot analyze whole sentence, therefore if both are possible, mark it as correct
         if both_possible:
             if expected_gender == "male":
-                return GENDER.male, matched_word
+                return GENDER.male, matched_word, matched_index
             else:
-                return GENDER.female, matched_word
+                return GENDER.female, matched_word, matched_index
 
-        return found_gender, matched_word
+        return found_gender, matched_word, matched_index
 
 
 if __name__ == "__main__":

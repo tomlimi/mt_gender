@@ -25,7 +25,7 @@ def calc_f1(precision: float, recall: float) -> float:
     return 2 * (precision * recall) / (precision + recall)
 
 
-def evaluate_bias(ds: List[str], predicted: List[GENDER],lang: str) -> Dict:
+def evaluate_bias(ds: List[str], predicted: List[GENDER],lang: str, match_ids: List[int]) -> Dict:
     """
     (language independent)
     Get performance metrics for gender bias.
@@ -39,7 +39,7 @@ def evaluate_bias(ds: List[str], predicted: List[GENDER],lang: str) -> Dict:
 
     count_unknowns = defaultdict(lambda: 0)
 
-    for (gold_gender, word_ind, sent, profession), pred_gender in zip(ds, predicted):
+    for (gold_gender, word_ind, sent, profession), pred_gender, match_idx in zip(ds, predicted, match_ids):
         if pred_gender == GENDER.ignore:
             continue # skip analysis of ignored words
 
@@ -59,7 +59,8 @@ def evaluate_bias(ds: List[str], predicted: List[GENDER],lang: str) -> Dict:
             correct_cnt[gold_gender] += 1
 
         pred_cnt[pred_gender] += 1
-
+        if match_idx is not None:
+            prof_dict[f"{profession}-{match_idx}"].append((pred_gender, gold_gender))
         prof_dict[profession].append((pred_gender, gold_gender))
         conf_dict[gold_gender][pred_gender] += 1
 
@@ -97,28 +98,40 @@ def evaluate_bias(ds: List[str], predicted: List[GENDER],lang: str) -> Dict:
 
 
     prof_recalls = {}
+    prof_precisions = {}
     for p in prof_dict.keys():
         prof_recalls[p]={}
+        prof_precisions[p]={}
         a=np.array(prof_dict[p])
 
         male_indices = np.where(a[:,1]==GENDER.male)
+        male_indices_predicted = np.where(a[:,0]==GENDER.male)
         num_of_correctly_predicted_male = np.count_nonzero(a[male_indices][:,0]==GENDER.male)
-        prof_recalls[p]["male_recall"] = num_of_correctly_predicted_male/len(male_indices[0])
-
+        prof_recalls[p]["male_recall"] = num_of_correctly_predicted_male/max(1,len(male_indices[0]))
+        prof_precisions[p]["male_precision"] = num_of_correctly_predicted_male/max(1,len(male_indices_predicted[0]))
+        
         female_indices = np.where(a[:,1]==GENDER.female)
+        female_indices_predicted = np.where(a[:,0]==GENDER.female)
         num_of_correctly_predicted_female = np.count_nonzero(a[female_indices][:,0]==GENDER.female)
-        prof_recalls[p]["female_recall"] = num_of_correctly_predicted_female/len(female_indices[0])
+        prof_recalls[p]["female_recall"] = num_of_correctly_predicted_female/max(1,len(female_indices[0]))
+        prof_precisions[p]["female_precision"] = num_of_correctly_predicted_female/max(1,len(female_indices_predicted[0]))
 
     print("*** prof_recalls ***")
     print(json.dumps(prof_recalls))
-    with open("../data/results/"+lang+"_results.txt","w+") as f:
+    print("*** prof_precisions ***")
+    print(json.dumps(prof_precisions))
+    
+    
+    with open(f"../translations/opus_mt/matching.{lang}/matching.{lang}.results.txt","w+") as f:
         f.write("*** output_dict ***\n")
         f.write(str(output_dict)+"\n")
         f.write("*** prof_accuracies ***\n")
         f.write(str(prof_accuracies)+"\n")
         f.write("*** prof_recalls ***\n")
         f.write(str(prof_recalls)+"\n")
-
+        f.write("*** prof_precision ***\n")
+        f.write(str(prof_precisions)+"\n")
+        
     male_prof = [prof for prof, vals in prof_dict.items()
                  if all(pred_gender == GENDER.male
                         for pred_gender
