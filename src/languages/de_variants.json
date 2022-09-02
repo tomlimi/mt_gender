@@ -1,64 +1,39 @@
 {
   "counselor-male": [
-    "Rechtsberater",
-    "Ratgeber",
-    "Berater",
-    "Psychologe",
-    "Beistand"
+    "Berater"
   ],
   "counselor-female": [
-    "Beraterin",
-    "Ratgeberin",
-    "Rechtsberaterin",
-    "Psychologin",
-    "Beistand"
+    "Beraterin"
   ],
   "driver-male": [
-    "Fahrer",
-    "Chauffeur",
-    "Fahrzeugführer"
+    "Fahrer"
   ],
   "driver-female": [
-    "Fahrzeugführerin",
-    "Fahrerin",
-    "Chauffeurin"
+    "Fahrerin"
   ],
   "designer-male": [
-    "Gestalter",
-    "Entwerfer",
-    "Designer"
+    "Designer",
+    "Gestalter"
   ],
   "designer-female": [
     "Designerin",
-    "Gestalterin",
-    "Entwerferin"
+    "Gestalterin"
   ],
   "salesperson-male": [
-    "Händler",
-    "Verkaufsangestellter",
     "Verkäufer",
-    "Vertreter"
+    "Händler"
   ],
   "salesperson-female": [
-    "Vertreterin",
-    "Verkaufsangestellte",
-    "Händlerin",
-    "Verkäuferin"
+    "Verkäuferin",
+    "Händlerin"
   ],
   "writer-male": [
-    "Dichter",
-    "Author",
-    "Verfasser",
-    "Schreiberling",
-    "Autor",
-    "Schriftsteller"
+    "Schriftsteller",
+    "Autor"
   ],
   "writer-female": [
-    "Verfasserin",
-    "Authorin",
     "Schriftstellerin",
-    "Autorin",
-    "Dichterin"
+    "Autorin"
   ],
   "developer-male": [
     "Entwickler"
@@ -68,69 +43,47 @@
   ],
   "farmer-male": [
     "Bauer",
-    "Landwirt",
-    "Farmer"
+    "Landwirt"
   ],
   "farmer-female": [
-    "Farmerin",
-    "Landwirtin",
-    "Bäuerin"
+    "Bäuerin",
+    "Landwirtin"
   ],
   "guard-male": [
-    "Bewacher",
-    "Wächter",
-    "Wachtposten",
-    "Wachmann",
-    "Wache"
+    "Wächter"
   ],
   "guard-female": [
-    "Wächterin",
-    "Wachtposten",
-    "Wachfrau",
-    "Bewacherin"
+    "Wächterin"
   ],
   "hairdresser-male": [
-    "Frisör",
-    "Friseur"
+    "Friseur",
+    "Frisör"
   ],
   "hairdresser-female": [
-    "Friseuse",
-    "Frisörin",
-    "Friseurin"
+    "Friseurin",
+    "Frisörin"
   ],
   "physician-male": [
-    "Doktor",
-    "Mediziner",
-    "Arzt"
+    "Arzt",
+    "Mediziner"
   ],
   "physician-female": [
-    "Medizinerin",
-    "Doktorin",
-    "Ärztin"
+    "Ärztin",
+    "Medizinerin"
   ],
   "supervisor-male": [
-    "Aufsicht",
-    "Aufseher",
-    "Doktorvater",
-    "Vorgesetzter",
-    "Betreuer"
+    "Betreuer",
+    "Vorgesetzter"
   ],
   "supervisor-female": [
-    "Aufsicht",
-    "Vorgesetzte",
     "Betreuerin",
-    "Doktormutter",
-    "Aufseherin"
+    "Vorgesetzte"
   ],
   "cleaner-male": [
-    "Putzfrau",
     "Putzmann",
-    "Gebäudereiniger",
     "Reinigungskraft"
   ],
   "cleaner-female": [
-    "Gebäudereinigerin",
-    "Putzmann",
     "Putzfrau",
     "Reinigungskraft"
   ],
@@ -141,35 +94,30 @@
     "Hausmeisterin"
   ],
   "carpenter-male": [
-    "Zimmermann",
     "Schreiner",
-    "Zimmerer",
-    "Tischler"
+    "Tischler",
+    "Zimmerer"
   ],
   "carpenter-female": [
     "Schreinerin",
-    "Zimmererin",
     "Tischlerin",
-    "Zimmerin",
-    "Zimmerfrau"
+    "Zimmererin"
   ],
   "librarian-male": [
-    "Büchereiangestellter",
     "Bibliothekar"
   ],
   "librarian-female": [
-    "Bibliothekarin",
-    "Büchereiangestellte"
+    "Bibliothekarin"
   ],
   "accountant-male": [
     "Buchhalter",
-    "Wirtschaftsprüfer",
-    "Steuerberater"
+    "Steuerberater",
+    "Wirtschaftsprüfer"
   ],
   "accountant-female": [
+    "Buchhalterin",
     "Steuerberaterin",
-    "Wirtschaftsprüferin",
-    "Buchhalterin"
+    "Wirtschaftsprüferin"
   ],
   "baker-male": [
     "Bäcker"
@@ -178,16 +126,10 @@
     "Bäckerin"
   ],
   "mover-male": [
-    "Spediteur",
-    "Möbelpacker",
-    "Umzugshilfe",
     "Umzugshelfer"
   ],
   "mover-female": [
-    "Umzugshelferin",
-    "Möbelpackerin",
-    "Umzugshilfe",
-    "Spediteurin"
+    "Umzugshelferin"
   ],
   "lawyer-male": [
     "Anwalt",
@@ -196,113 +138,83 @@
   ],
   "lawyer-female": [
     "Anwältin",
-    "Juristin",
-    "Rechtsanwältin"
+    "Rechtsanwältin",
+    "Juristin"
   ],
   "teacher-male": [
-    "Lehrkraft",
     "Lehrer"
   ],
   "teacher-female": [
     "Lehrerin"
   ],
   "auditor-male": [
-    "Rechnungsprüfer",
-    "Prüfer",
     "Wirtschaftsprüfer",
-    "Buchprüfer"
+    "Prüfer",
+    "Rechnungsprüfer"
   ],
   "auditor-female": [
-    "Buchprüferin",
-    "Rechnungsprüferin",
     "Wirtschaftsprüferin",
-    "Prüferin"
+    "Prüferin",
+    "Rechnungsprüferin"
   ],
   "assistant-male": [
-    "Hilfskraft",
-    "Mitarbeiter",
     "Assistent"
   ],
   "assistant-female": [
-    "Assistentin",
-    "Mitarbeiterin"
+    "Assistentin"
   ],
   "clerk-male": [
-    "Sekretär",
-    "Büroangestellter",
     "Angestellter",
     "Sachbearbeiter"
   ],
   "clerk-female": [
-    "Sekretärin",
-    "Büroangestellte",
     "Angestellte",
     "Sachbearbeiterin"
   ],
   "laborer-male": [
-    "Hilfsarbeiter",
-    "Arbeiter",
-    "Schwerarbeiter"
+    "Arbeiter"
   ],
   "laborer-female": [
-    "Schwerarbeiterin",
-    "Hilfsarbeiterin",
     "Arbeiterin"
   ],
   "editor-male": [
-    "Editor",
     "Herausgeber",
-    "Lektor",
-    "Redakteur"
+    "Redakteur",
+    "Lektor"
   ],
   "editor-female": [
     "Herausgeberin",
-    "Lektorin",
-    "Editorin",
-    "Redakteurin"
+    "Redakteurin",
+    "Lektorin"
   ],
   "CEO-male": [
     "Geschäftsführer",
-    "CEO",
-    "Geschäftsleiter",
-    "Vorstandsvorsitzender",
-    "Vorstand"
+    "Vorstandsvorsitzender"
   ],
   "CEO-female": [
-    "Geschäftsleiterin",
-    "Vorstandsvorsitzende",
-    "Vorstand, Vorständin",
-    "CEO",
-    "Geschäftsführerin"
+    "Geschäftsführerin",
+    "Vorstandsvorsitzende"
   ],
   "nurse-male": [
-    "Krankenschwester",
     "Krankenpfleger",
     "Pfleger"
   ],
   "nurse-female": [
     "Krankenschwester",
-    "Krankenpflegerin",
-    "Pflegerin",
-    "Krankenpfleger"
+    "Pflegerin"
   ],
   "housekeeper-male": [
-    "Hauswirtschafter",
-    "Haushälter",
-    "Haushalter"
+    "Haushälter"
   ],
   "housekeeper-female": [
-    "Haushälterin",
-    "Hauswirtschafterin"
+    "Haushälterin"
   ],
   "chief-male": [
-    "Leiter",
-    "Anführer",
-    "Chef"
+    "Chef",
+    "Leiter"
   ],
   "chief-female": [
     "Chefin",
-    "Anführerin",
     "Leiterin"
   ],
   "cook-male": [
@@ -318,30 +230,24 @@
     "Kassiererin"
   ],
   "sheriff-male": [
-    "Sheriff",
-    "Vollzugsbeamter"
+    "Sheriff"
   ],
   "sheriff-female": [
-    "Sheriff",
-    "Vollzugsbeamte"
+    "Sheriff"
   ],
   "analyst-male": [
     "Analyst",
     "Analytiker"
   ],
   "analyst-female": [
-    "Analytikerin",
-    "Analystin"
+    "Analystin",
+    "Analytikerin"
   ],
   "secretary-male": [
-    "Schriftführer",
-    "Sekretär",
-    "Assistent"
+    "Sekretär"
   ],
   "secretary-female": [
-    "Sekretärin",
-    "Assistentin",
-    "Schriftführerin"
+    "Sekretärin"
   ],
   "construction worker-male": [
     "Bauarbeiter"
@@ -350,59 +256,43 @@
     "Bauarbeiterin"
   ],
   "mechanic-male": [
-    "Handwerker",
     "Mechaniker",
-    "Monteur"
+    "Monteur",
+    "Handwerker"
   ],
   "mechanic-female": [
     "Mechanikerin",
-    "Handwerkerin",
-    "Monteurin"
+    "Monteurin",
+    "Handwerkerin"
   ],
   "manager-male": [
-    "Chef",
+    "Manager",
     "Geschäftsführer",
-    "Manager"
+    "Chef"
   ],
   "manager-female": [
     "Managerin",
-    "Chefin",
-    "Geschäftsführerin"
+    "Geschäftsführerin",
+    "Chefin"
   ],
   "receptionist-male": [
-    "Empfangsmitarbeiter",
     "Rezeptionist",
     "Empfangsperson"
   ],
   "receptionist-female": [
     "Rezeptionistin",
-    "Empfangsdame",
-    "Empfangsmitarbeiterin"
+    "Empfangsdame"
   ],
   "tailor-male": [
-    "Näher",
     "Schneider"
   ],
   "tailor-female": [
-    "Schneiderin",
-    "Näherin"
+    "Schneiderin"
   ],
   "attendant-male": [
-    "Aufseher",
-    "Diener",
-    "Begleiter",
-    "Wärter",
-    "Anwesender",
-    "Betreuer",
-    "Bediensteter"
+    "Begleiter"
   ],
   "attendant-female": [
-    "Dienerin",
-    "Betreuerin",
-    "Bedienstete",
-    "Anwesende",
-    "Wärterin",
-    "Aufseherin",
     "Begleiterin"
   ]
 }
