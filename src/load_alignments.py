@@ -1,5 +1,5 @@
 """ Usage:
-    <file-name> --ds=DATASET_FILE --bi=IN_FILE --align=ALIGN_FILE --out=OUT_FILE --lang=LANG  [--debug --match]
+    <file-name> --ds=DATASET_FILE --bi=IN_FILE --align=ALIGN_FILE --out=OUT_FILE --lang=LANG  --translator=TRANS [--debug --match]
 """
 # External imports
 import logging
@@ -169,6 +169,7 @@ if __name__ == "__main__":
     align_fn = args["--align"]
     out_fn = args["--out"]
     lang = args["--lang"]
+    translation_system = args["--translator"]
 
     match = args['--match']
     debug = args["--debug"]
@@ -215,7 +216,7 @@ if __name__ == "__main__":
         output_predictions(target_sentences, gender_predictions, target_gender, out_fn)
         match_ids = [None] * len(gender_predictions)
 
-    d = evaluate_bias(ds, gender_predictions,lang, match_ids)
+    d = evaluate_bias(ds, gender_predictions,lang, match_ids, translation_system=translation_system, matching=match)
 
 
     logging.info("DONE")
