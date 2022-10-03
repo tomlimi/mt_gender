@@ -16,7 +16,7 @@ prefix=en-$lang
 # Prepare files for translation
 cut -f3 $dataset > ./tmp.in            # Extract sentences
 mkdir -p ../translations/$trans_sys/
-mkdir -p ../data/human/$lang
+#mkdir -p ../data/human/$lang
 
 # Translate
 trans_fn=../translations/$trans_sys/$prefix.txt
@@ -32,10 +32,15 @@ align_fn=forward.$prefix.align
 $FAST_ALIGN_BASE/build/fast_align -i $trans_fn -d -o -v > $align_fn
 
 # Evaluate
-mkdir -p ../data/human/$trans_sys/$lang/
-out_fn=../data/human/$trans_sys/$lang/${lang}.pred.csv
+mkdir -p ../translations/$trans_sys/matching.$lang/
+out_fn=../translations/$trans_sys/matching.$lang/${lang}.pred.csv
+echo "python load_alignments.py --ds=${dataset}  --bi=${trans_fn} --align=${align_fn} --lang=${lang} --out=${out_fn} --match"
+python load_alignments.py --ds=$dataset  --bi=$trans_fn --align=$align_fn --lang=$lang --out=$out_fn --translator $trans_sys --match
+
+mkdir -p ../translations/$trans_sys/$lang/
+out_fn=../translations/$trans_sys/$lang/${lang}.pred.csv
 echo "python load_alignments.py --ds=${dataset}  --bi=${trans_fn} --align=${align_fn} --lang=${lang} --out=${out_fn}"
-python load_alignments.py --ds=$dataset  --bi=$trans_fn --align=$align_fn --lang=$lang --out=$out_fn
+python load_alignments.py --ds=$dataset  --bi=$trans_fn --align=$align_fn --lang=$lang --out=$out_fn --translator $trans_sys
 
 # Prepare files for human annots
 # human_fn=../data/human/$trans_sys/$lang/${lang}.in.csv

@@ -4,13 +4,12 @@
 set -e
 
 corpus_fn=$1
-out_folder=$2
-
+mt_systems=$2
+out_folder=../translations/$2
 
 #langs=("ar" "uk" "he" "ru" "it" "fr" "es" "de")
-langs=("de" "he")
+langs=("he")
 #mt_systems=("sota" "aws" "bing" "google" "systran" )
-mt_systems=("opus_mt")
 
 
 # Make sure systran has all translations
@@ -42,7 +41,7 @@ do
         mkdir -p $out_folder/$trans_sys
         out_file=$out_folder/$trans_sys/$lang.log
         echo "Evaluating $lang into $out_file"
-        ../scripts/evaluate_language.sh $corpus_fn $lang $trans_sys # > $out_file
+        ../scripts/evaluate_language.sh $corpus_fn $lang $trans_sys > $out_file
     done
 done
 
