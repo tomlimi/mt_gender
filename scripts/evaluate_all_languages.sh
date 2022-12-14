@@ -8,7 +8,7 @@ mt_systems=$2
 out_folder=../translations/$2
 
 #langs=("ar" "uk" "he" "ru" "it" "fr" "es" "de")
-langs=("de" "he")
+langs=("de" "he" "es")
 #mt_systems=("sota" "aws" "bing" "google" "systran" )
 
 
