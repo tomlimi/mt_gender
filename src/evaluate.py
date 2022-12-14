@@ -25,7 +25,7 @@ def calc_f1(precision: float, recall: float) -> float:
     return 2 * (precision * recall) / (precision + recall)
 
 
-def evaluate_bias(ds: List[str], predicted: List[GENDER], lang: str, match_ids: List[int], translation_system="opus_mt", matching=False) -> Dict:
+def evaluate_bias(ds: List[str], predicted: List[GENDER], lang: str, match_ids: List[int], translation_system="opus_mt", matching=False, split='') -> Dict:
     """
     (language independent)
     Get performance metrics for gender bias.
@@ -122,7 +122,9 @@ def evaluate_bias(ds: List[str], predicted: List[GENDER], lang: str, match_ids: 
     print(json.dumps(prof_precisions))
     
     matching_txt = 'matching.' if matching else ''
-    with open(f"../translations/{translation_system}/{matching_txt}{lang}/{matching_txt}{lang}.results.txt","w+") as f:
+    if split:
+        split = f"_{split}"
+    with open(f"../translations/{translation_system}/{matching_txt}{lang}/{matching_txt}{lang}{split}.results.txt","w+") as f:
         f.write("*** output_dict ***\n")
         f.write(str(output_dict)+"\n")
         f.write("*** prof_accuracies ***\n")

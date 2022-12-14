@@ -13,6 +13,7 @@ import json
 from languages.util import GENDER, get_gender_from_token
 from languages.german import GermanPredictor
 from languages.semitic_languages import HebrewPredictor
+from languages.spacy_support import SpacyPredictor
 #=-----
 
 class ManualPredictor:
@@ -22,6 +23,7 @@ class ManualPredictor:
 
     de_variants_fn = "./languages/de_variants.json"
     he_variants_fn = "./languages/he_variants.json"
+    es_variants_fn = "./languages/es_variants.json"
     
     
     def __init__(self, lang):
@@ -34,6 +36,10 @@ class ManualPredictor:
         elif self.lang == 'he':
             self.automatic_predictor = HebrewPredictor()
             with open(self.he_variants_fn, 'r') as var_json:
+                self.variants = json.load(var_json)
+        elif self.lang == 'es':
+            self.automatic_predictor = SpacyPredictor("es")
+            with open(self.es_variants_fn, 'r') as var_json:
                 self.variants = json.load(var_json)
         else:
             raise ValueError(f"Unrecognized language {self.lang}, supported: de and he")

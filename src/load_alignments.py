@@ -20,7 +20,7 @@ from languages.gendered_article import GenderedArticlePredictor, \
     get_german_determiners, GERMAN_EXCEPTION, get_french_determiners
 from languages.pymorph_support import PymorphPredictor
 from languages.semitic_languages import HebrewPredictor, ArabicPredictor
-from languages.manual_matching_de_he import ManualPredictor
+from languages.manual_matching import ManualPredictor
 from languages.morfeusz_support import MorfeuszPredictor
 from evaluate import evaluate_bias
 from languages.czech import CzechPredictor
@@ -41,7 +41,8 @@ LANGUAGE_PREDICTOR = {
 
 LANGUAGE_MATCH_PREDICTOR = {
     "de": lambda: ManualPredictor("de"),
-    "he": lambda: ManualPredictor("he")
+    "he": lambda: ManualPredictor("he"),
+    "es": lambda: ManualPredictor("es")
 }
 
 
@@ -189,7 +190,14 @@ if __name__ == "__main__":
 
     target_sentences = [tgt_sent for (ind, (src_sent, tgt_sent)) in bitext]
     target_gender = [d[0] for d in ds]
-    
+
+    split = ''
+    if ds_fn.find('pro') != -1:
+        split = 'pro'
+    elif ds_fn.find('anti') != -1:
+        split = 'anti'
+
+
     if match:
         gender_predictor_matched = LANGUAGE_MATCH_PREDICTOR[lang]()
         gednder_word_predicted = [gender_predictor_matched.get_gender(prof, translated_sent, entity_index, ds_entry)
@@ -199,9 +207,10 @@ if __name__ == "__main__":
                                               map(lambda ls:min(ls, default = -1), tgt_inds),
                                               ds))]
         gender_predictions, word_matches, match_ids = zip(*gednder_word_predicted)
-    
-        # Output predictions
-        output_predictions_with_matches(target_sentences, gender_predictions, target_gender, word_matches, out_fn)
+
+        if split == '':
+            # Output predictions
+            output_predictions_with_matches(target_sentences, gender_predictions, target_gender, word_matches, out_fn)
 
     else:
         gender_predictor = LANGUAGE_PREDICTOR[lang]()
@@ -212,11 +221,11 @@ if __name__ == "__main__":
                                           map(lambda ls:min(ls, default = -1), tgt_inds),
                                           ds))]
     
-        # Output predictions
-        output_predictions(target_sentences, gender_predictions, target_gender, out_fn)
+        if split == '':
+            # Output predictions
+            output_predictions(target_sentences, gender_predictions, target_gender, out_fn)
         match_ids = [None] * len(gender_predictions)
 
-    d = evaluate_bias(ds, gender_predictions,lang, match_ids, translation_system=translation_system, matching=match)
-
+    d = evaluate_bias(ds, gender_predictions,lang, match_ids, translation_system=translation_system, matching=match, split=split)
 
     logging.info("DONE")
